@@ -1,12 +1,14 @@
 package com.daikai.hbase.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.alibaba.druid.pool.DruidDataSource;
+//??import com.daikai.PhoenixNoPoolingDatasource;
 
 import javax.sql.DataSource;
 
@@ -28,6 +30,9 @@ public class PhoenixDataSource {
     @Qualifier("phoenixJdbcDataSource")
     public DataSource dataSource(){
         DruidDataSource druidDataSource = new DruidDataSource();
+        
+        //??PhoenixNoPoolingDatasource druidDataSource = new PhoenixNoPoolingDatasource();
+        
         druidDataSource.setUrl(environment.getProperty("phoenix.url"));
         druidDataSource.setDriverClassName(environment.getProperty("phoenix.driver-class-name"));
         druidDataSource.setUsername(environment.getProperty("phoenix.username"));
