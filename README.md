@@ -63,6 +63,10 @@ phoenix 命令行创建一个测试表: ORG_DEPT_NC
 
 ## 浏览器访问
 
-    http://webserverip:8088/webapp/query
+    http://code.ztgame.com:8088/hbase/query
+
+    http://code.ztgame.com:8088/hbase/count
+
+    http://code.ztgame.com:8088/hbase/add
     
 可以看到json 格式的返回信息！

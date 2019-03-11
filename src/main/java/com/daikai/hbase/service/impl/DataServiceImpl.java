@@ -12,6 +12,10 @@ import javax.sql.RowSet;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+
+
 /**
  * @autor
  */
@@ -23,22 +27,36 @@ public class DataServiceImpl  implements DataService{
     @Qualifier("phoenixJdbcTemplate")
     JdbcTemplate  jdbcTemplate;
 
+    private static int userId = 0;
+    
+    private Logger logger = LoggerFactory.getLogger(DataServiceImpl.class);
+
     /*
         CREATE TABLE IF NOT EXISTS ORG_DEPT_NC (ID VARCHAR(30) NOT NULL, NAME VARCHAR(30), CONSTRAINT PK PRIMARY KEY (ID));
     */
 
     public ResultVO add() {
-        return jdbcTemplate.update("upsert into ORG_DEPT_NC (ID, NAME ) VALUES ('zhang','软件开发')") == 1?
-                new ResultVO(true,"插入成功！"):new ResultVO(false,"插入失败！");
+        userId++;
+
+        String sql = String.format("upsert into ORG_DEPT_NC (ID, NAME ) VALUES ('zhang%d', '软件开发')", userId);
+        
+        logger.info(sql);
+        
+        return jdbcTemplate.update(sql) == 1? new ResultVO(true, "插入成功！") : new ResultVO(false,"插入失败！");
     }
 
     public int countDept() {
-        return jdbcTemplate.queryForObject("select count(1) from ORG_DEPT_NC ",Integer.class);
+        return jdbcTemplate.queryForObject("select count(1) from ORG_DEPT_NC", Integer.class);
     }
 
     public ResultVO delete() {
-       return jdbcTemplate.update("delete from ORG_DEPT_NC WHERE ID = 'zhangliang' ") == 1?
-                new ResultVO(true,"删除成功！"):new ResultVO(false,"删除失败！");
+        String sql = String.format("delete from ORG_DEPT_NC WHERE ID = 'zhang%d'", userId);
+
+        userId--;
+
+        logger.info(sql);
+
+        return jdbcTemplate.update(sql) == 1? new ResultVO(true, "删除成功！"): new ResultVO(false,"删除失败！");
     }
 
     public ResultVO update() {
@@ -47,6 +65,6 @@ public class DataServiceImpl  implements DataService{
     }
 
     public List<Map<String, Object>> query() {
-        return jdbcTemplate.queryForList("select * from ORG_DEPT_NC ");
+        return jdbcTemplate.queryForList("select * from ORG_DEPT_NC");
     }
 }
